@@ -1,9 +1,164 @@
+<!-- templates/register.html -->
 {% extends "base.html" %}
-
-{% block title %}
-{{title}}
-{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-Register
+<style>
+  body {
+    background-color: #f0f3f7;
+  }
+
+  /* Wrapper for the registration card */
+  .register-wrapper {
+    display: flex;
+    min-height: 80vh;
+    margin: 3rem auto;
+    max-width: 900px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    background-color: #ffffff;
+  }
+
+  /* Left panel with illustration / gradient */
+  .register-left {
+    flex: 1;
+    background: linear-gradient(135deg, #0d6efd, #20c997);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+  }
+  .register-left h3 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+  .register-left p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+  .register-left img {
+    max-width: 200px;
+    margin-top: 2rem;
+    opacity: 0.85;
+  }
+
+  /* Right panel with form */
+  .register-right {
+    flex: 1;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .register-right h2 {
+    text-align: center;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 2rem;
+  }
+
+  .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+    border-color: #0d6efd;
+  }
+
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    font-weight: 600;
+  }
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+  }
+
+  .login-link {
+    color: #0d6efd;
+    font-weight: 500;
+  }
+  .login-link:hover {
+    text-decoration: underline;
+    color: #0b5ed7;
+  }
+
+  /* Responsive for mobile */
+  @media (max-width: 768px) {
+    .register-wrapper {
+      flex-direction: column;
+    }
+    .register-left {
+      display: none;
+    }
+  }
+</style>
+
+<div class="register-wrapper">
+
+  <!-- Left panel: can place finance illustration here -->
+  <div class="register-left">
+    <h3>Track Your Investments</h3>
+    <p>Monitor your portfolios, manage expenses, and grow your wealth—all in one place.</p>
+    <!-- Placeholder illustration -->
+    <img src="https://www.svgrepo.com/show/307620/finance.svg" alt="Finance illustration">
+  </div>
+
+  <!-- Right panel: form -->
+  <div class="register-right">
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ error|escape }}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>{{ error|escape }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <h2>Create Your Account</h2>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="id_username"
+               value="{{ form.username.value|default_if_none:'' }}" placeholder="Enter username">
+      </div>
+
+      <div class="mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" id="id_email"
+               value="{{ form.email.value|default_if_none:'' }}" placeholder="Enter your email">
+      </div>
+
+      <div class="mb-3">
+        <label for="id_password1" class="form-label">Password</label>
+        <input type="password" name="password1" class="form-control" id="id_password1" placeholder="Enter password">
+      </div>
+
+      <div class="mb-3">
+        <label for="id_password2" class="form-label">Confirm Password</label>
+        <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Confirm password">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
+    </form>
+
+    <p class="text-center">
+      Already have an account? <a href="{% url 'login_user' %}" class="login-link">Login here</a>
+    </p>
+  </div>
+</div>
 {% endblock %}
